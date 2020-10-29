@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import Fab from "@material-ui/core/Fab";
 import Zoom from "@material-ui/core/Zoom";
+import TextareaAutosize from "react-textarea-autosize";
 
 function CreateArea(props) {
     const [note, setNote] = useState({
@@ -37,15 +38,15 @@ function CreateArea(props) {
                         placeholder="Title"
                     />
                 )}
-
-                <textarea
+                <TextareaAutosize
+                    style={{ overflow: "hidden" }}
                     name="content"
                     onClick={expand}
                     onChange={handleChange}
                     value={note.content}
                     placeholder="Take a note..."
-                    rows={expandNoteArea ? 3 : 1}
-                />
+                    minRows={expandNoteArea ? 3 : 1}
+                ></TextareaAutosize>
                 <Zoom in={expandNoteArea}>
                     <Fab
                         onClick={(event) => {

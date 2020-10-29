@@ -66,13 +66,6 @@ app.get("/api/getAll", (req, res) => {
     });
 });
 
-//get a specific note based on the ID
-app.get("/api/getNote", (req, res) => {
-    //connect to DB
-    //fetch the desired Note
-    //send the response
-});
-
 //deletes a specific note based on ID
 app.delete("/api/deleteNote", (req, res) => {
     //connect to DB
@@ -92,14 +85,26 @@ app.delete("/api/deleteNote", (req, res) => {
 //patches a specific Note based on ID
 app.patch("/api/updateNote", (req, res) => {
     //connect to DB
-    //create object with modidified properties
-    //update the database
-    //send response
-});
+    mongoose.connect(url, connectionProperties);
 
-app.get("/test", (req, res) => {
-    const message = "Working correctly!";
-    res.json(message);
+    //update the database
+    Note.findByIdAndUpdate(
+        Object(req.body.data.noteUpdate.id),
+        {
+            title: req.body.data.noteUpdate.title,
+            content: req.body.data.noteUpdate.content,
+            date: new Date(),
+        },
+        { useFindAndModify: true },
+        (err) => {
+            if (err) {
+                mongoose.connection.close();
+                res.status(err.status).json(err);
+            } else {
+                res.status(200).json("Success");
+            }
+        }
+    );
 });
 
 app.listen(process.env.port || 5000, () => {
