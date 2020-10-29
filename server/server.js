@@ -76,8 +76,17 @@ app.get("/api/getNote", (req, res) => {
 //deletes a specific note based on ID
 app.delete("/api/deleteNote", (req, res) => {
     //connect to DB
+    mongoose.connect(url, connectionProperties);
+
     //delete the required Note
-    //send response
+    Note.deleteOne({ _id: Object(req.body.noteId) }, (err) => {
+        if (err) {
+            mongoose.connection.close();
+            res.status(err.status).json(err);
+        } else {
+            res.status(200).json("Success");
+        }
+    });
 });
 
 //patches a specific Note based on ID
